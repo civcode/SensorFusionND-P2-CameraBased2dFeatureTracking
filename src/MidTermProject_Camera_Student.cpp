@@ -93,6 +93,14 @@ int main(int argc, const char *argv[])
         {
             detKeypointsHarris(keypoints, imgGray, false);
         }
+        else if ((detectorType.compare("FAST") == 0) ||
+                 (detectorType.compare("BRISK") == 0) ||  
+                 (detectorType.compare("ORB") == 0) ||  
+                 (detectorType.compare("SIFT") == 0) ||
+                 (detectorType.compare("SURF") == 0) )
+        {
+            detKeypointsModern(keypoints, imgGray, detectorType, false);
+        }
         //// EOF STUDENT ASSIGNMENT
 
         //// STUDENT ASSIGNMENT

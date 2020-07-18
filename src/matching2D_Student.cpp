@@ -145,3 +145,72 @@ void detKeypointsHarris(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, bool
         cv::waitKey(0);
     }
 }
+
+void detKeypointsModern(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, std::string detectorType, bool bVis) 
+{
+    //double t;
+    cv::Ptr<cv::FeatureDetector> detector;
+
+    if (detectorType.compare("FAST") == 0)  {
+        int fast_threshold = 30;
+        bool fast_nms = true;
+
+        cv::FastFeatureDetector::DetectorType type = cv::FastFeatureDetector::TYPE_9_16;
+        detector = cv::FastFeatureDetector::create(fast_threshold, fast_nms, type);
+    
+    } else if (detectorType.compare("BRISK") == 0)  {
+        int brisk_threshold = 30;
+        int brisk_octaves = 3;
+        float brisk_pattern_scale = 1.0f;
+
+        detector = cv::BRISK::create(brisk_threshold, brisk_octaves, brisk_pattern_scale);
+    
+    } else if (detectorType.compare("ORB") == 0)  {
+        int orb_nfeatures = 3000;
+        float orb_scale_factor = 1.2f;
+        int orb_nlevels = 8;
+
+        detector = cv::ORB::create(orb_nfeatures, orb_scale_factor, orb_nlevels);
+    
+    // } else if (detectorType.compare("FREAK") == 0)  {
+    //     // int orb_nfeatures = 3000;
+    //     // float orb_scale_factor = 1.2f;
+    //     // int orb_nlevels = 8;
+
+    //     detector = cv::xfeatures2d::FREAK::create();
+    
+    } else if (detectorType.compare("SIFT") == 0)  {
+        // int orb_nfeatures = 3000;
+        // float orb_scale_factor = 1.2f;
+        // int orb_nlevels = 8;
+        
+        detector = cv::xfeatures2d::SIFT::create();
+    
+    } else if (detectorType.compare("SURF") == 0)  {
+        // int orb_nfeatures = 3000;
+        // float orb_scale_factor = 1.2f;
+        // int orb_nlevels = 8;
+        
+        detector = cv::xfeatures2d::SURF::create();
+    }
+
+    // run detector
+    double t = (double)cv::getTickCount();
+    detector->detect(img, keypoints);
+    t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
+    cout << detectorType << " detection with n=" << keypoints.size() << " keypoints in " << 1000 * t / 1.0 << " ms" << endl;
+
+    
+
+
+    // visualize results
+    if (bVis)
+    {
+        cv::Mat visImage = img.clone();
+        cv::drawKeypoints(img, keypoints, visImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+        string windowName = "Harris Corner Detector Results";
+        cv::namedWindow(windowName, 6);
+        imshow(windowName, visImage);
+        cv::waitKey(0);
+    }
+}
