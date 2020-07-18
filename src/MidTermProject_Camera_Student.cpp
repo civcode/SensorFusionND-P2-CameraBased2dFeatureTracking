@@ -21,6 +21,8 @@
 
 using namespace std;
 
+//extern struct frame_data_ frame_data;
+
 /* MAIN PROGRAM */
 int main(int argc, const char *argv[])
 {
@@ -124,9 +126,13 @@ int main(int argc, const char *argv[])
                 if (fabs(dx) < vehicleRect.width/2 && 
                     fabs(dy) < vehicleRect.height/2) {
                         keypoints_tmp.push_back(point);
+                        
+                        properties::frame_data[imgIndex].feature_size.push_back(point.size);
                 }
             }
             keypoints.swap(keypoints_tmp);
+            properties::frame_data[imgIndex].features_in_roi =  keypoints.size();
+            cout << "Number of keypoint in ROI =" << keypoints.size() << endl;
         }
 
         //// EOF STUDENT ASSIGNMENT
@@ -171,9 +177,9 @@ int main(int argc, const char *argv[])
             /* MATCH KEYPOINT DESCRIPTORS */
 
             vector<cv::DMatch> matches;
-            string matcherType = "MAT_BF";        // MAT_BF, MAT_FLANN
-            string descriptorType = "DES_BINARY"; // DES_BINARY, DES_HOG
-            string selectorType = "SEL_NN";       // SEL_NN, SEL_KNN
+            string matcherType = properties::feature_matcher_type;        // MAT_BF, MAT_FLANN
+            string descriptorType = properties::feature_descriptor_type; // DES_BINARY, DES_HOG
+            string selectorType = properties::match_selector_type;      // SEL_NN, SEL_KNN
 
             //// STUDENT ASSIGNMENT
             //// TASK MP.5 -> add FLANN matching in file matching2D.cpp
@@ -220,6 +226,8 @@ int main(int argc, const char *argv[])
         }
 
     } // eof loop over all images
+
+    properties::printEvalData();
 
     return 0;
 }
