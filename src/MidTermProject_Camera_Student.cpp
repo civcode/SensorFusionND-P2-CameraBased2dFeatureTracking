@@ -17,6 +17,7 @@
 #include "matching2D.hpp"
 
 #include "mycvtools.h"
+#include "properties.h"
 
 using namespace std;
 
@@ -93,7 +94,7 @@ int main(int argc, const char *argv[])
         //// TASK MP.3 -> only keep keypoints on the preceding vehicle
 
         // only keep keypoints on the preceding vehicle
-        bool bFocusOnVehicle = true;
+        bool bFocusOnVehicle = properies::use_focus_keypoints_on_vehicle;
         cv::Rect vehicleRect(535, 180, 180, 150);
         if (bFocusOnVehicle)
         {
@@ -103,10 +104,10 @@ int main(int argc, const char *argv[])
         //// EOF STUDENT ASSIGNMENT
 
         // optional : limit number of keypoints (helpful for debugging and learning)
-        bool bLimitKpts = true;
+        bool bLimitKpts = properies::use_matches_max_count;
         if (bLimitKpts)
         {
-            int maxKeypoints = 50;
+            int maxKeypoints = properies::matches_max_count;
 
             if (detectorType.compare("SHITOMASI") == 0)
             { // there is no response info, so keep the first 50 as they are sorted in descending quality order
@@ -180,6 +181,8 @@ int main(int argc, const char *argv[])
 
                 string windowName = "Matching keypoints between two camera images";
                 cv::namedWindow(windowName, 7);
+                cv::resizeWindow(windowName, 1000, 700);
+                cv::moveWindow(windowName, 20, 20);
                 cv::imshow(windowName, matchImg);
                 cout << "Press key to continue to next image" << endl;
                 cv::waitKey(0); // wait for key to be pressed
