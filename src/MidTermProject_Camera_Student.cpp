@@ -65,6 +65,10 @@ int main(int argc, const char *argv[])
         // push image into data frame buffer
         DataFrame frame;
         frame.cameraImg = imgGray;
+        //cout << "dataBuffer.size() = " << dataBuffer.size() << endl;
+        if (dataBuffer.size() > dataBufferSize)
+            dataBuffer.erase(dataBuffer.begin());
+
         dataBuffer.push_back(frame);
 
         //// EOF STUDENT ASSIGNMENT
@@ -173,6 +177,7 @@ int main(int argc, const char *argv[])
                 //                 cv::Scalar::all(-1), cv::Scalar::all(-1),
                 //                 vector<char>(), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 
+                // stack images vertically to draw matches
                 mycv::drawMatches((dataBuffer.end() - 2)->cameraImg, (dataBuffer.end() - 2)->keypoints,
                                 (dataBuffer.end() - 1)->cameraImg, (dataBuffer.end() - 1)->keypoints,
                                 matches, matchImg,
@@ -181,8 +186,8 @@ int main(int argc, const char *argv[])
 
                 string windowName = "Matching keypoints between two camera images";
                 cv::namedWindow(windowName, 7);
-                cv::resizeWindow(windowName, 1000, 700);
-                cv::moveWindow(windowName, 20, 20);
+                cv::resizeWindow(windowName, properies::output_window_width, properies::output_window_height);
+                cv::moveWindow(windowName, properies::output_window_pos_x, properies::output_window_pos_y);
                 cv::imshow(windowName, matchImg);
                 cout << "Press key to continue to next image" << endl;
                 cv::waitKey(0); // wait for key to be pressed

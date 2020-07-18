@@ -31,4 +31,5 @@ void drawMatches( InputArray img1, const std::vector<KeyPoint>& keypoints1,
                   const std::vector<char>& matchesMask, DrawMatchesFlags flags );
 
 }
+
 #endif //MY_CV_TOOLS_H_
