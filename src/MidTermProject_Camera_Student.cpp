@@ -97,7 +97,8 @@ int main(int argc, const char *argv[])
                  (detectorType.compare("BRISK") == 0) ||  
                  (detectorType.compare("ORB") == 0) ||  
                  (detectorType.compare("SIFT") == 0) ||
-                 (detectorType.compare("SURF") == 0) )
+                 (detectorType.compare("SURF") == 0) ||
+                 (detectorType.compare("AKAZE") == 0) )
         {
             detKeypointsModern(keypoints, imgGray, detectorType, false);
         }
@@ -111,7 +112,21 @@ int main(int argc, const char *argv[])
         cv::Rect vehicleRect(535, 180, 180, 150);
         if (bFocusOnVehicle)
         {
-            // ...
+            cv::Point2f roi_center;
+            roi_center.x = vehicleRect.x + static_cast<float>(vehicleRect.width)/2.0f;
+            roi_center.y = vehicleRect.y + static_cast<float>(vehicleRect.height)/2.0f;
+            //cout << "center point: " << roi_center.x << ", " << roi_center.y << endl;
+
+            vector<cv::KeyPoint> keypoints_tmp; 
+            for (auto point : keypoints) {
+                float dx = roi_center.x - point.pt.x;
+                float dy = roi_center.y - point.pt.y;
+                if (fabs(dx) < vehicleRect.width/2 && 
+                    fabs(dy) < vehicleRect.height/2) {
+                        keypoints_tmp.push_back(point);
+                }
+            }
+            keypoints.swap(keypoints_tmp);
         }
 
         //// EOF STUDENT ASSIGNMENT

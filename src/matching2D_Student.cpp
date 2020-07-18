@@ -148,8 +148,7 @@ void detKeypointsHarris(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, bool
 
 void detKeypointsModern(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, std::string detectorType, bool bVis) 
 {
-    //double t;
-    cv::Ptr<cv::FeatureDetector> detector;
+    cv::Ptr<cv::FeatureDetector> detector = nullptr;
 
     if (detectorType.compare("FAST") == 0)  {
         int fast_threshold = 30;
@@ -172,33 +171,26 @@ void detKeypointsModern(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, std:
 
         detector = cv::ORB::create(orb_nfeatures, orb_scale_factor, orb_nlevels);
     
-    // } else if (detectorType.compare("FREAK") == 0)  {
-    //     // int orb_nfeatures = 3000;
-    //     // float orb_scale_factor = 1.2f;
-    //     // int orb_nlevels = 8;
-
-    //     detector = cv::xfeatures2d::FREAK::create();
-    
     } else if (detectorType.compare("SIFT") == 0)  {
-        // int orb_nfeatures = 3000;
-        // float orb_scale_factor = 1.2f;
-        // int orb_nlevels = 8;
-        
+
         detector = cv::xfeatures2d::SIFT::create();
     
     } else if (detectorType.compare("SURF") == 0)  {
-        // int orb_nfeatures = 3000;
-        // float orb_scale_factor = 1.2f;
-        // int orb_nlevels = 8;
-        
-        detector = cv::xfeatures2d::SURF::create();
-    }
 
+        detector = cv::xfeatures2d::SURF::create();
+    
+    } else if (detectorType.compare("AKAZE") == 0)  {
+
+        detector = cv::AKAZE::create();
+    }
+    
     // run detector
-    double t = (double)cv::getTickCount();
-    detector->detect(img, keypoints);
-    t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
-    cout << detectorType << " detection with n=" << keypoints.size() << " keypoints in " << 1000 * t / 1.0 << " ms" << endl;
+    if (detector != nullptr) {
+        double t = (double)cv::getTickCount();
+        detector->detect(img, keypoints);
+        t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
+        cout << detectorType << " detection with n=" << keypoints.size() << " keypoints in " << 1000 * t / 1.0 << " ms" << endl;
+    }
 
     
 
