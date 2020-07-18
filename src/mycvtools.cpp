@@ -1,5 +1,6 @@
 #include "mycvtools.h"
 
+#include <iostream>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -12,6 +13,7 @@
 namespace mycv {
 
 using namespace cv;
+using namespace std;
 
 const int draw_shift_bits = 4;
 const int draw_multiplier = 1 << draw_shift_bits;
@@ -22,7 +24,7 @@ void _prepareImage(InputArray src, const Mat& dst)
     CV_CheckType(dst.type(), dst.type() == CV_8UC3 || dst.type() == CV_8UC4, "Unsupported destination image");
     const int src_cn = src.channels();
     const int dst_cn = dst.channels();
-
+    
     if (src_cn == dst_cn)
         src.copyTo(dst);
     else if (src_cn == 1)
@@ -33,6 +35,7 @@ void _prepareImage(InputArray src, const Mat& dst)
         cvtColor(src, dst, COLOR_BGRA2BGR);
     else
         CV_Error(Error::StsInternal, "");
+    
 }
 
 void _prepareImgAndDrawKeypoints( InputArray img1, const std::vector<KeyPoint>& keypoints1,
@@ -42,14 +45,19 @@ void _prepareImgAndDrawKeypoints( InputArray img1, const std::vector<KeyPoint>& 
 {
     Mat outImg;
     Size img1size = img1.size(), img2size = img2.size();
-    Size size( img1size.width + img2size.width, MAX(img1size.height, img2size.height) );
+    //Size size( img1size.width + img2size.width, MAX(img1size.height, img2size.height) );
+    Size size( MAX(img1size.width, img2size.width), img1size.height + img2size.height );
+    
     if( !!(flags & DrawMatchesFlags::DRAW_OVER_OUTIMG) )
     {
         outImg = _outImg.getMat();
         if( size.width > outImg.cols || size.height > outImg.rows )
             CV_Error( Error::StsBadSize, "outImg has size less than need to draw img1 and img2 together" );
+        // outImg1 = outImg( Rect(0, 0, img1size.width, img1size.height) );
+        // outImg2 = outImg( Rect(img1size.width, 0, img2size.width, img2size.height) );
+        
         outImg1 = outImg( Rect(0, 0, img1size.width, img1size.height) );
-        outImg2 = outImg( Rect(img1size.width, 0, img2size.width, img2size.height) );
+        outImg2 = outImg( Rect(0, img1size.height, img2size.width, img2size.height) );
     }
     else
     {
@@ -58,20 +66,23 @@ void _prepareImgAndDrawKeypoints( InputArray img1, const std::vector<KeyPoint>& 
         _outImg.create(size, CV_MAKETYPE(img1.depth(), out_cn));
         outImg = _outImg.getMat();
         outImg = Scalar::all(0);
+        // outImg1 = outImg( Rect(0, 0, img1size.width, img1size.height) );
+        // outImg2 = outImg( Rect(img1size.width, 0, img2size.width, img2size.height) );
+        
         outImg1 = outImg( Rect(0, 0, img1size.width, img1size.height) );
-        outImg2 = outImg( Rect(img1size.width, 0, img2size.width, img2size.height) );
+        outImg2 = outImg( Rect(0, img1size.height, img2size.width, img2size.height) );
 
         _prepareImage(img1, outImg1);
         _prepareImage(img2, outImg2);
     }
-
+    
     // draw keypoints
     if( !(flags & DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS) )
     {
         Mat _outImg1 = outImg( Rect(0, 0, img1size.width, img1size.height) );
         drawKeypoints( _outImg1, keypoints1, _outImg1, singlePointColor, flags | DrawMatchesFlags::DRAW_OVER_OUTIMG );
 
-        Mat _outImg2 = outImg( Rect(img1size.width, 0, img2size.width, img2size.height) );
+        Mat _outImg2 = outImg( Rect(0, img1size.height, img2size.width, img2size.height) );
         drawKeypoints( _outImg2, keypoints2, _outImg2, singlePointColor, flags | DrawMatchesFlags::DRAW_OVER_OUTIMG );
     }
 }
@@ -126,9 +137,13 @@ void _drawMatch( InputOutputArray outImg, InputOutputArray outImg1, InputOutputA
 
     Point2f pt1 = kp1.pt,
             pt2 = kp2.pt,
-            dpt2 = Point2f( std::min(pt2.x+outImg1.size().width, float(outImg.size().width-1)), pt2.y );
+            //dpt2 = Point2f( std::min(pt2.x+outImg1.size().width, float(outImg.size().width-1)), pt2.y )
+            dpt2 = Point2f( pt2.x, pt2.y+outImg1.size().height )
+            ;
 
     line( outImg,
+          //Point(cvRound(pt1.x*draw_multiplier), cvRound(pt1.y*draw_multiplier)),
+          //Point(cvRound(dpt2.x*draw_multiplier), cvRound(dpt2.y*draw_multiplier)),
           Point(cvRound(pt1.x*draw_multiplier), cvRound(pt1.y*draw_multiplier)),
           Point(cvRound(dpt2.x*draw_multiplier), cvRound(dpt2.y*draw_multiplier)),
           color, 1, LINE_AA, draw_shift_bits );

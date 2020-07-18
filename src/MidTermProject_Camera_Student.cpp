@@ -166,11 +166,11 @@ int main(int argc, const char *argv[])
             if (bVis)
             {
                 cv::Mat matchImg = ((dataBuffer.end() - 1)->cameraImg).clone();
-                cv::drawMatches((dataBuffer.end() - 2)->cameraImg, (dataBuffer.end() - 2)->keypoints,
-                                (dataBuffer.end() - 1)->cameraImg, (dataBuffer.end() - 1)->keypoints,
-                                matches, matchImg,
-                                cv::Scalar::all(-1), cv::Scalar::all(-1),
-                                vector<char>(), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+                // cv::drawMatches((dataBuffer.end() - 2)->cameraImg, (dataBuffer.end() - 2)->keypoints,
+                //                 (dataBuffer.end() - 1)->cameraImg, (dataBuffer.end() - 1)->keypoints,
+                //                 matches, matchImg,
+                //                 cv::Scalar::all(-1), cv::Scalar::all(-1),
+                //                 vector<char>(), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 
                 mycv::drawMatches((dataBuffer.end() - 2)->cameraImg, (dataBuffer.end() - 2)->keypoints,
                                 (dataBuffer.end() - 1)->cameraImg, (dataBuffer.end() - 1)->keypoints,
