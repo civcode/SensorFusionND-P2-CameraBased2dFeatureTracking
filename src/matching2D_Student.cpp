@@ -1,5 +1,6 @@
 #include <numeric>
 #include "matching2D.hpp"
+#include "properties.h"
 
 using namespace std;
 
@@ -48,11 +49,43 @@ void descKeypoints(vector<cv::KeyPoint> &keypoints, cv::Mat &img, cv::Mat &descr
 
         extractor = cv::BRISK::create(threshold, octaves, patternScale);
     }
-    else
+    else if (descriptorType.compare("BRIEF") == 0)
     {
-
-        //...
+        int bytes = 32;
+        bool use_orientation = false;
+        extractor = cv::xfeatures2d::BriefDescriptorExtractor::create(bytes, use_orientation);
     }
+    else if (descriptorType.compare("ORB") == 0)
+    {
+        int orb_nfeatures = 3000;
+        float orb_scale_factor = 1.2f;
+        int orb_nlevels = 8;
+
+        extractor = cv::ORB::create(orb_nfeatures, orb_scale_factor, orb_nlevels);
+    }
+    else if (descriptorType.compare("FREAK") == 0)
+    {
+        bool orientatin_normalized = true;
+        bool scale_normalized = true;
+        float pattern_scale = 22.0f;
+        int n_octaves = 4;
+
+        extractor = cv::xfeatures2d::FREAK::create(orientatin_normalized, scale_normalized, pattern_scale, n_octaves);
+
+    }else if (descriptorType.compare("AKAZE") == 0)
+    {
+        // AKAZE descriptors can only be used with AKAZE keypoints 
+        if (properties::keypoint_detector_type.compare("AKAZE") != 0) {
+            cout << "error: AKAZE descriptors can only be used with AKAZE keypoits. you are using " << properties::keypoint_detector_type << " keypoints." << endl;
+            exit(-1);
+        }
+        extractor = cv::AKAZE::create();
+
+    }else if (descriptorType.compare("SIFT") == 0)
+    {
+        extractor = cv::xfeatures2d::SIFT::create();    
+    }
+
 
     // perform feature description
     double t = (double)cv::getTickCount();

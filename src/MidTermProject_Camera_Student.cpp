@@ -78,7 +78,7 @@ int main(int argc, const char *argv[])
 
         // extract 2D keypoints from current image
         vector<cv::KeyPoint> keypoints; // create empty feature list for current image
-        string detectorType = properies::keypoint_detector_type;//"SHITOMASI";
+        string detectorType = properties::keypoint_detector_type;//"SHITOMASI";
         //std::cout << "type: " << detectorType << std::endl;
         
         //// STUDENT ASSIGNMENT
@@ -108,7 +108,7 @@ int main(int argc, const char *argv[])
         //// TASK MP.3 -> only keep keypoints on the preceding vehicle
 
         // only keep keypoints on the preceding vehicle
-        bool bFocusOnVehicle = properies::use_focus_keypoints_on_vehicle;
+        bool bFocusOnVehicle = properties::use_focus_keypoints_on_vehicle;
         cv::Rect vehicleRect(535, 180, 180, 150);
         if (bFocusOnVehicle)
         {
@@ -132,10 +132,10 @@ int main(int argc, const char *argv[])
         //// EOF STUDENT ASSIGNMENT
 
         // optional : limit number of keypoints (helpful for debugging and learning)
-        bool bLimitKpts = properies::use_matches_max_count;
+        bool bLimitKpts = properties::use_matches_max_count;
         if (bLimitKpts)
         {
-            int maxKeypoints = properies::matches_max_count;
+            int maxKeypoints = properties::matches_max_count;
 
             if (detectorType.compare("SHITOMASI") == 0)
             { // there is no response info, so keep the first 50 as they are sorted in descending quality order
@@ -156,7 +156,7 @@ int main(int argc, const char *argv[])
         //// -> BRIEF, ORB, FREAK, AKAZE, SIFT
 
         cv::Mat descriptors;
-        string descriptorType = "BRISK"; // BRIEF, ORB, FREAK, AKAZE, SIFT
+        string descriptorType = properties::feature_descriptor_type; //"BRISK"; // BRIEF, ORB, FREAK, AKAZE, SIFT
         descKeypoints((dataBuffer.end() - 1)->keypoints, (dataBuffer.end() - 1)->cameraImg, descriptors, descriptorType);
         //// EOF STUDENT ASSIGNMENT
 
@@ -210,8 +210,8 @@ int main(int argc, const char *argv[])
 
                 string windowName = "Matching keypoints between two camera images";
                 cv::namedWindow(windowName, 7);
-                cv::resizeWindow(windowName, properies::output_window_width, properies::output_window_height);
-                cv::moveWindow(windowName, properies::output_window_pos_x, properies::output_window_pos_y);
+                cv::resizeWindow(windowName, properties::output_window_width, properties::output_window_height);
+                cv::moveWindow(windowName, properties::output_window_pos_x, properties::output_window_pos_y);
                 cv::imshow(windowName, matchImg);
                 cout << "Press key to continue to next image" << endl;
                 cv::waitKey(0); // wait for key to be pressed
