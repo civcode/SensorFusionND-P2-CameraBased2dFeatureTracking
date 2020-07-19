@@ -9,12 +9,20 @@ void matchDescriptors(std::vector<cv::KeyPoint> &kPtsSource, std::vector<cv::Key
                       std::vector<cv::DMatch> &matches, std::string descriptorType, std::string matcherType, std::string selectorType)
 {
     // configure matcher
-    bool crossCheck = false;
+    bool crossCheck = properties::use_matcher_cross_check;
     cv::Ptr<cv::DescriptorMatcher> matcher;
 
     if (matcherType.compare("MAT_BF") == 0)
     {
-        int normType = cv::NORM_HAMMING;
+        int normType;
+        if (properties::feature_descriptor_type.compare("SIFT") == 0 || 
+            properties::feature_descriptor_type.compare("SURF") == 0) {
+            normType = cv::NORM_L2;
+        } else { 
+            normType = cv::NORM_HAMMING;
+        }
+        //normType = cv::NORM_L2;
+        //normType = cv::NORM_HAMMING;
         matcher = cv::BFMatcher::create(normType, crossCheck);
     }
     else if (matcherType.compare("MAT_FLANN") == 0)
@@ -38,6 +46,7 @@ void matchDescriptors(std::vector<cv::KeyPoint> &kPtsSource, std::vector<cv::Key
     { // k nearest neighbors (k=2)
 
         vector<vector<cv::DMatch>> knn_matches;
+        cout << "here\n";
         matcher->knnMatch(descSource, descRef, knn_matches, 2);
 
         double dist_ratio_min = 0.8;
@@ -46,6 +55,7 @@ void matchDescriptors(std::vector<cv::KeyPoint> &kPtsSource, std::vector<cv::Key
                 matches.push_back((*it)[0]);
             }
         }
+        
     }
 }
 

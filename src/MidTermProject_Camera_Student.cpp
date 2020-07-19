@@ -126,7 +126,7 @@ int main(int argc, const char *argv[])
                 if (fabs(dx) < vehicleRect.width/2 && 
                     fabs(dy) < vehicleRect.height/2) {
                         
-                        point.size = static_cast<float>(round(point.size));
+                        point.size = static_cast<float>(round(point.size*10)/10);
                         keypoints_tmp.push_back(point);
                         
                         properties::frame_data[imgIndex].feature_size.push_back((point.size));
@@ -191,6 +191,7 @@ int main(int argc, const char *argv[])
                              (dataBuffer.end() - 2)->descriptors, (dataBuffer.end() - 1)->descriptors,
                              matches, descriptorType, matcherType, selectorType);
 
+            properties::frame_data[imgIndex].feature_matches = matches.size();
             //// EOF STUDENT ASSIGNMENT
 
             // store matches in current data frame

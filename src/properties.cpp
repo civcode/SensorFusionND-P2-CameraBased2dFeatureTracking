@@ -8,6 +8,7 @@
 #include <math.h>
 #include <map>
 #include <numeric>
+#include <opencv2/core.hpp>
 #include "matplotlibcpp.h"
 
 namespace properties {
@@ -27,14 +28,16 @@ void printEvalData() {
     cout << "No. of Feature in ROI: ";
 
     vector<float> ft_cnt;
+    vector<float> match_cnt;
     for (auto frame : frame_data) {
         //cout << frame.features_in_roi << ", ";
         ft_cnt.push_back(frame.features_in_roi);
+        match_cnt.push_back(frame.feature_matches);
     } 
     {
         float min = *min_element(ft_cnt.begin(), ft_cnt.end());
         float max = *max_element(ft_cnt.begin(), ft_cnt.end());
-        float avg = accumulate(ft_cnt.begin(), ft_cnt.end(), 0) / ft_cnt.size();
+        float avg = (float)accumulate(ft_cnt.begin(), ft_cnt.end(), 0) / ft_cnt.size();
         cout << " [min, max, avg] = [" << min << ", " << max << ", " << avg << "]\n";
     }
 
@@ -75,18 +78,22 @@ void printEvalData() {
     // }
     // cout << endl;
 
+    // compute statistics of feature size
+    vector<vector<float>> ft_stats;
     for (auto it=ft_dist.begin(); it!=ft_dist.end(); ++it) {
         vector<float>& ft_cnt = it->second;
         float min = *min_element(ft_cnt.begin(), ft_cnt.end());
         float max = *max_element(ft_cnt.begin(), ft_cnt.end());
-        float avg = accumulate(ft_cnt.begin(), ft_cnt.end(), 0) / ft_cnt.size();
+        float avg = (float)accumulate(ft_cnt.begin(), ft_cnt.end(), 0) / ft_cnt.size();
         cout << it->first << " [" << min << ", " << max << ", " << avg << "]\n"; 
+        vector<float> ft = {it->first, min, max, avg};
+        ft_stats.push_back(ft);
     }
     cout << endl;
 
-    plt::title(properties::keypoint_detector_type);
-    plt::plot(ft_cnt);
-    plt::show();
+    // plt::title(properties::keypoint_detector_type);
+    // plt::plot(ft_cnt);
+    // plt::show();
 
     //{
         //plt::hist({3,4,6,2,1});
@@ -94,6 +101,24 @@ void printEvalData() {
 
 
     //}
+    {
+        // write statistical data to file
+        vector<vector<float>> ft_size;
+        for (auto frame : frame_data) {
+            ft_size.push_back(frame.feature_size);
+        }
+
+        cv::FileStorage fs("eval-detector-" + properties::keypoint_detector_type + ".json", cv::FileStorage::WRITE);
+        // cv::FileStorage fs("eval-DET_" + properties::keypoint_detector_type + "-DES_" + properties::feature_descriptor_type + "-" + properties::feature_matcher_type + "-" + properties::match_selector_type + ".json", cv::FileStorage::WRITE);
+        fs << "detector_type" << properties::keypoint_detector_type;
+        fs << "descriptor_type" << properties::feature_descriptor_type;
+        fs << "matcher_type" << properties::feature_matcher_type;
+        fs << "selector_type" << properties::match_selector_type;
+        fs << "feature_count" << ft_cnt;
+        fs << "match_count" << match_cnt; 
+        fs << "feature_size"  << ft_stats;
+        fs.release();
+    }
 
 
 }
