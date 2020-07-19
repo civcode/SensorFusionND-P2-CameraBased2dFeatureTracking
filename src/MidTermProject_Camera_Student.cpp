@@ -125,9 +125,11 @@ int main(int argc, const char *argv[])
                 float dy = roi_center.y - point.pt.y;
                 if (fabs(dx) < vehicleRect.width/2 && 
                     fabs(dy) < vehicleRect.height/2) {
+                        
+                        point.size = static_cast<float>(round(point.size));
                         keypoints_tmp.push_back(point);
                         
-                        properties::frame_data[imgIndex].feature_size.push_back(point.size);
+                        properties::frame_data[imgIndex].feature_size.push_back((point.size));
                 }
             }
             keypoints.swap(keypoints_tmp);
