@@ -84,8 +84,16 @@ void printEvalData() {
     }
     cout << endl;
 
-    plt::plot({1,2,3,4});
+    plt::title(properties::keypoint_detector_type);
+    plt::plot(ft_cnt);
     plt::show();
+
+    //{
+        //plt::hist({3,4,6,2,1});
+        //plt::show();
+
+
+    //}
 
 
 }
