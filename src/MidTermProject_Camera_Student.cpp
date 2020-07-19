@@ -49,6 +49,7 @@ int main(int argc, const char *argv[])
 
     for (size_t imgIndex = 0; imgIndex <= imgEndIndex - imgStartIndex; imgIndex++)
     {
+        properties::current_frame_index = imgIndex;
         /* LOAD IMAGE INTO BUFFER */
 
         // assemble filenames for current index

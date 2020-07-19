@@ -22,18 +22,18 @@ const bool use_matches_max_count = false;
 const int matches_max_count = 1000;
 
 // set feature type
-//const string keypoint_detector_type = "SHITOMASI";
+const string keypoint_detector_type = "SHITOMASI";
 //const string keypoint_detector_type = "HARRIS";
-const string keypoint_detector_type = "BRISK";
+//const string keypoint_detector_type = "BRISK";
 //const string keypoint_detector_type = "ORB";
 //const string keypoint_detector_type = "SIFT";
 //const string keypoint_detector_type = "SURF"; // not part of assignment
 //const string keypoint_detector_type = "AKAZE";
 
 // set descriptor type
-//const string feature_descriptor_type =  "BRISK";    //binary
+const string feature_descriptor_type =  "BRISK";    //binary
 //const string feature_descriptor_type =  "BRIEF";  //binary
-const string feature_descriptor_type =  "ORB";    //binary
+//const string feature_descriptor_type =  "ORB";    //binary
 //const string feature_descriptor_type =  "FREAK";  //binary
 //const string feature_descriptor_type =  "AKAZE";  //binary
 //const string feature_descriptor_type =  "SIFT";   //HOG
@@ -52,14 +52,19 @@ const string descriptor_representation_type = "DES_BINARY";
 //const string match_selector_type = "SEL_NN";
 const string match_selector_type = "SEL_KNN";
 
+//int current_frame_index;
 
 struct frame_data_ {
     int features_in_roi;
     int feature_matches;
+    float detector_time;
+    float descriptor_time;
+    float matcher_time;
     vector<float> feature_size;
 };
 
 extern struct frame_data_ frame_data[];
+extern int current_frame_index;
 
 
 
