@@ -172,7 +172,7 @@ The following tables show the processing time for feature detection and feature 
 
 #### Feature Matches per Processing Time
 
-For the following table the average number of feature matches per image was divided by the average preocessing time for feature detection and description per image. The ten highest ranking combinations of detector and descriptor are shown as well.
+For the following table the average number of feature matches per image was divided by the average processing time for feature detection and description per image. The ten highest ranking combinations of detector and descriptor are shown as well.
 
 ![][img07]
 
@@ -188,7 +188,7 @@ According to the measured processing time, the top three combinations are:
 |2|ORB		|BRISK|24|
 |3|HARRIS	|BRISK|30| 
 
-If we look at the best performance in terms of feature matches per time unit we get the following top three. The Harris detector looses its position because of the computationally expensive gradient calculation. 
+If we look at the best performance in terms of feature matches per time unit we get the following top three. The Harris detector loses its position because of the computationally expensive gradient calculation. 
 
 |Rank|Detector|Descriptor|Milliseconds per feature match|
 |---		|---|---|---|
