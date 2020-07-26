@@ -172,7 +172,7 @@ The following tables show the processing time for feature detection and feature 
 
 #### Feature Matches per Processing Time
 
-The following tables show the required processing time per feature match, as well as the ten highest ranking combinations of detector and descriptor.
+For the following table the average number of feature matches per image was divided by the average preocessing time for feature detection and description per image. The ten highest ranking combinations of detector and descriptor are shown as well.
 
 ![][img07]
 
@@ -196,10 +196,7 @@ If we look at the best performance in terms of feature matches per time unit we 
 |2|ORB		|BRIEF	|0.117097|
 |3|ORB		|ORB	|0.130858| 
 
-
-
-
-
+Considering the number of feature matches within the ROI per image, which should be as high as possible, the combination of ORB detector and BRISK descriptor performs best with 253 matches, followed by the combination of ORB detector and ORB descriptor with 248 matches. The combination of ORB and BRIEF achieves only 180 matches.    
 
 
 
