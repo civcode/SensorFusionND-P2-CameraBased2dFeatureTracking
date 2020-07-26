@@ -151,7 +151,7 @@ The next graph shows the distribution of the feature neighborhood (aka feature s
 _Count the number of matched keypoints for all 10 images using all possible combinations of detectors and descriptors. In the matching step, the BF approach is used with the descriptor distance ratio set to 0.8._
 
 
-The following tables shows the averager number of feature matches within the ROI over all images, and the ten highest ranking combinations of detector and descriptor
+The following tables shows the averager number of feature matches within the ROI over all images, and the ten highest ranking combinations of detector and descriptor.
 
 ![][img03]
 
@@ -164,7 +164,7 @@ _Log the time it takes for keypoint detection and descriptor extraction. The res
 
 #### Processing Time
 
-The following tables show the processing time for feature detection and feature descriptions, as well as the ten highest ranking combinations of detector and descriptor
+The following tables show the processing time for feature detection and feature descriptions, as well as the ten highest ranking combinations of detector and descriptor.
 
 ![][img05]
 
@@ -172,7 +172,7 @@ The following tables show the processing time for feature detection and feature 
 
 #### Feature Matches per Processing Time
 
-The following tables show the required processing time per feature match, as well as the ten highest ranking combinations of detector and descriptor
+The following tables show the required processing time per feature match, as well as the ten highest ranking combinations of detector and descriptor.
 
 ![][img07]
 
