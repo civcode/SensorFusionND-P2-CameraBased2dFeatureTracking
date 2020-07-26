@@ -25,18 +25,18 @@ const int matches_max_count = 1000;
 //const string keypoint_detector_type = "SHITOMASI";
 //const string keypoint_detector_type = "HARRIS";
 //const string keypoint_detector_type = "BRISK";
-//const string keypoint_detector_type = "ORB";
-const string keypoint_detector_type = "SIFT";
+const string keypoint_detector_type = "ORB";
+//const string keypoint_detector_type = "SIFT";
 //const string keypoint_detector_type = "SURF"; // not part of assignment
 //const string keypoint_detector_type = "AKAZE";
 
 // set descriptor type
-//const string feature_descriptor_type =  "BRISK";    //binary
+const string feature_descriptor_type =  "BRISK";    //binary
 //const string feature_descriptor_type =  "BRIEF";  //binary
 //const string feature_descriptor_type =  "ORB";    //binary
 //const string feature_descriptor_type =  "FREAK";  //binary
 //const string feature_descriptor_type =  "AKAZE";  //binary
-const string feature_descriptor_type =  "SIFT";   //HOG
+//const string feature_descriptor_type =  "SIFT";   //HOG
 //const string feature_descriptor_type =  "SURF";   //HOG not part of assignment
 
 // set matcher type
