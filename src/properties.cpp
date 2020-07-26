@@ -130,8 +130,8 @@ void printEvalData() {
         fs << "descriptor_time" << des_time;  
         fs << "matcher_time" << match_time;
  
-        fs << "descriptor_time_avg" << accumulate(des_time.begin(), des_time.end(), 0.0f)/des_time.size();
         fs << "detector_time_avg" << accumulate(det_time.begin(), det_time.end(), 0.0f)/det_time.size();
+        fs << "descriptor_time_avg" << accumulate(des_time.begin(), des_time.end(), 0.0f)/des_time.size();
         match_time.erase(match_time.begin());
         fs << "matcher_time_avg" << accumulate(match_time.begin(), match_time.end(), 0.0f)/match_time.size();
         

@@ -115,24 +115,35 @@ int main(int argc, const char *argv[])
         cv::Rect vehicleRect(535, 180, 180, 150);
         if (bFocusOnVehicle)
         {
-            cv::Point2f roi_center;
-            roi_center.x = vehicleRect.x + static_cast<float>(vehicleRect.width)/2.0f;
-            roi_center.y = vehicleRect.y + static_cast<float>(vehicleRect.height)/2.0f;
-            //cout << "center point: " << roi_center.x << ", " << roi_center.y << endl;
+            // cv::Point2f roi_center;
+            // roi_center.x = vehicleRect.x + static_cast<float>(vehicleRect.width)/2.0f;
+            // roi_center.y = vehicleRect.y + static_cast<float>(vehicleRect.height)/2.0f;
+            // //cout << "center point: " << roi_center.x << ", " << roi_center.y << endl;
+
+            // vector<cv::KeyPoint> keypoints_tmp; 
+            // for (auto point : keypoints) {
+            //     float dx = roi_center.x - point.pt.x;
+            //     float dy = roi_center.y - point.pt.y;
+            //     if (fabs(dx) < vehicleRect.width/2 && 
+            //         fabs(dy) < vehicleRect.height/2) {
+                        
+            //             point.size = static_cast<float>(round(point.size*10)/10);
+            //             keypoints_tmp.push_back(point);
+                        
+            //             properties::frame_data[imgIndex].feature_size.push_back((point.size));
+            //     }
+            // }
 
             vector<cv::KeyPoint> keypoints_tmp; 
             for (auto point : keypoints) {
-                float dx = roi_center.x - point.pt.x;
-                float dy = roi_center.y - point.pt.y;
-                if (fabs(dx) < vehicleRect.width/2 && 
-                    fabs(dy) < vehicleRect.height/2) {
+                if (vehicleRect.contains(point.pt)) {
+                    point.size = static_cast<float>(round(point.size*10)/10);
+                    keypoints_tmp.push_back(point);
                         
-                        point.size = static_cast<float>(round(point.size*10)/10);
-                        keypoints_tmp.push_back(point);
-                        
-                        properties::frame_data[imgIndex].feature_size.push_back((point.size));
+                    properties::frame_data[imgIndex].feature_size.push_back((point.size));
                 }
             }
+
             keypoints.swap(keypoints_tmp);
             properties::frame_data[imgIndex].features_in_roi =  keypoints.size();
             cout << "Number of keypoint in ROI =" << keypoints.size() << endl;
