@@ -9,12 +9,12 @@
 #include <map>
 #include <numeric>
 #include <opencv2/core.hpp>
-#include "matplotlibcpp.h"
+//#include "matplotlibcpp.h"
 
 namespace properties {
 
 using namespace std;
-namespace plt = matplotlibcpp;
+//namespace plt = matplotlibcpp;
 
 struct frame_data_ frame_data[10];
 
