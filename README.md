@@ -26,6 +26,11 @@ See the classroom instruction and code comments for more details on each of thes
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
   * Windows: recommend using [MinGW](http://www.mingw.org/)
 
+## OpenCV 4.4.0
+* SIFT was moved from non-free to the main repository 
+  * 4.3.0 and earlier: cv::xfeatures2d::SIFT::create();
+  * 4.4.0 and above:   cv::SIFT::create();
+    
 ## Basic Build Instructions
 
 1. Clone this repo.
